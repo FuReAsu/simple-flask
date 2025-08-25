@@ -10,10 +10,10 @@ def create_app():
     app.secret_key = secrets.token_hex(32)
 
     #Define Log dir and Log file
-    LOG_DIR = "log"
+    LOG_DIR = os.getenv('APP_LOG_PATH', 'log')
     if not os.path.exists(LOG_DIR):
         os.makedirs(LOG_DIR)
-    LOG_FILE = os.path.join(LOG_DIR, 'flask.log')
+    LOG_FILE = os.path.join(LOG_DIR, 'app.log')
 
     logging.basicConfig(
         #filename=LOG_FILE,

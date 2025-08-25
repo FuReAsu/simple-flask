@@ -1,13 +1,12 @@
 from flask import Blueprint, render_template, request
 import socket
-import datetime
 import os
 import logging
 
 logger = logging.getLogger(__name__)
 input_bp = Blueprint('input', __name__)
 
-FILE_PATH = os.getenv('DATA_PATH','data')
+FILE_PATH = os.getenv('APP_DATA_PATH','data')
 FILE_NAME = os.path.join(FILE_PATH, 'data.txt')
 
 if not os.path.exists(FILE_PATH):
@@ -22,7 +21,6 @@ else:
 
 @input_bp.route('/input', methods=['GET', 'POST'])
 def input():
-    now = datetime.datetime.now()
     server_name = socket.gethostname()
     if request.headers.get('X-Forwarded-For'):
         client_ip = request.headers.get('X-Forwarded-For')

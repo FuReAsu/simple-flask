@@ -1,9 +1,11 @@
 FROM python:3.14-rc-alpine3.21
 
+COPY ./requirements.txt .
+
+RUN pip install -r requirements.txt
+
 RUN mkdir /app
 COPY app /app/
 WORKDIR /app
 
-RUN pip install -r requirements.txt
-
-CMD ["gunicorn","-w","1","-b","0.0.0.0:8765","--access-logfile","-","run:app"]
+CMD ["gunicorn","app:app"]
