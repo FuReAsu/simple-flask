@@ -35,8 +35,10 @@ def create_app():
     from .home import home_bp
     from .cookies import cookies_bp
     from .input import input_bp
+    from .health import health_bp
     app.register_blueprint(home_bp)
     app.register_blueprint(cookies_bp)
     app.register_blueprint(input_bp)
+    app.register_blueprint(health_bp)
     
     return app
