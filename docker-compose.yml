@@ -1,0 +1,27 @@
+services:
+  simple-flask:
+    build: .
+    image: fureasu346/simple-flask:latest
+    container_name: simple-flask
+    hostname: simple-flask
+    environment:
+      APP_PORT: 5080
+      APP_LOG_PATH: /log
+      APP_DATA_PATH: /data
+    volumes:
+      - data:/data
+      - log:/log
+    ports:
+      - 5080:5080
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+        reservations:
+          cpus: "0.1"
+          memory: "64M"
+    restart: always
+volumes:
+  data:
+  log:
