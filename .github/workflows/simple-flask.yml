@@ -1,0 +1,47 @@
+name: simple-flask
+run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ github.ref_name }} -> ${{ github.event.pull_requests.base.ref }}
+on:
+  push:
+    branches:
+      - 'main'
+      - 'configure-ci-pipeline'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Test
+        run: pytest -v
+
+  push_build:
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Build docker image
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${GITHUB_SHA::8} .
+      - name: Login to dockerhub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Push to dockerhub
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${GITHUB_SHA::8}
+
+  pull_repuest_build:
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Build docker image
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.event.pull_request.base.ref }} .
+      - name: Login to dockerhub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Push to dockerhub
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.event.pull_request.base.ref }}
