@@ -1,0 +1,43 @@
+name: simple-flask
+run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ github.ref_name }}
+on:
+  push:
+    branches:
+      - 'main'
+      - 'configure-ci-pipeline'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Test
+        run: pytest -v
+
+  push_build:
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name }} == 'push'
+    steps:
+      - name: Build docker image
+        run: docker build -t ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.sha }}
+      - name: Login to dockerhub
+        run: echo "${{ DOCKERHUB_PASSWORD }} | docker login -u $  {{ DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Push to dockerhub
+        run: docker push ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.sha }}
+
+  pull_repuest_build:
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name }} == 'pull_request'
+    steps:
+      - name: Build docker image
+        run: docker build -t ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.ref_name }}
+      - name: Login to dockerhub
+        run: echo "${{ DOCKERHUB_PASSWORD }} | docker login -u $  {{ DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Push to dockerhub
+        run: docker push ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.ref_name }}
