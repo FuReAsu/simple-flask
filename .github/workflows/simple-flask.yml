@@ -23,21 +23,21 @@ jobs:
     if: ${{ github.event_name }} == 'push'
     steps:
       - name: Build docker image
-        run: docker build -t ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.sha }}
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.sha }}
       - name: Login to dockerhub
-        run: echo "${{ DOCKERHUB_PASSWORD }} | docker login -u $  {{ DOCKERHUB_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u $  {{ vars.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Push to dockerhub
-        run: docker push ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.sha }}
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.sha }}
 
   pull_repuest_build:
     runs-on: ubuntu-24.04
     if: ${{ github.event_name }} == 'pull_request'
     steps:
       - name: Build docker image
-        run: docker build -t ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.ref_name }}
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }}
       - name: Login to dockerhub
-        run: echo "${{ DOCKERHUB_PASSWORD }} | docker login -u $  {{ DOCKERHUB_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u $  {{ vars.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Push to dockerhub
-        run: docker push ${{ DOCKERHUB_USERNAME }}/${{ DOCKERHUB_IMAGE }}:${{ github.ref_name }}
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }}
