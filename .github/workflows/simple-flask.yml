@@ -29,7 +29,7 @@ jobs:
       - name: Build docker image
         run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${GITHUB_SHA::8} .
       - name: Login to dockerhub
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u $  {{ vars.DOCKERHUB_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
 
       - name: Push to dockerhub
         run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${GITHUB_SHA::8}
@@ -43,7 +43,7 @@ jobs:
       - name: Build docker image
         run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }} .
       - name: Login to dockerhub
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u $  {{ vars.DOCKERHUB_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
 
       - name: Push to dockerhub
         run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }}
