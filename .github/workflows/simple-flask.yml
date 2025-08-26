@@ -13,6 +13,8 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run Test
@@ -22,6 +24,8 @@ jobs:
     runs-on: ubuntu-24.04
     if: ${{ github.event_name }} == 'push'
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
       - name: Build docker image
         run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.sha }}
       - name: Login to dockerhub
@@ -34,6 +38,8 @@ jobs:
     runs-on: ubuntu-24.04
     if: ${{ github.event_name }} == 'pull_request'
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
       - name: Build docker image
         run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }}
       - name: Login to dockerhub
