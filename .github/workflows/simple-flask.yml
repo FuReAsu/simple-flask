@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ gith
 on:
   push:
     branches:
-      - 'feature/*'
+      - 'main'
       - 'configure-ci-pipeline'
   pull_request:
     branches:
@@ -40,8 +40,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: Build docker image
-        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:pr-${{ github.event.pull_request.number }} .
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.event.pull_request.base.ref }} .
       - name: Login to dockerhub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
       - name: Push to dockerhub
-        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:pr-${{ github.event.pull_request.number }}
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.event.pull_request.base.ref }}
