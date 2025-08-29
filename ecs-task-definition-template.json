@@ -1,0 +1,65 @@
+{
+	"family": "simple-flask",
+	"executionRoleArn": "arn:aws:iam::412277093350:role/ecsTaskExecutionRole",
+	"networkMode": "awsvpc",
+	"containerDefinitions": [
+		{
+			"name": "simple-flask",
+			"image": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/simple-flask:${ECR_IMAGE_TAG}",
+			"memory": 512,
+			"cpu": 256,
+			"essential": true,
+			"environment": [
+				{
+					"name": "APP_PORT",
+					"value": "${APP_PORT}"
+				},
+				{
+					"name": "APP_LOG_PATH",
+					"value": "${APP_LOG_PATH}"
+				},
+				{
+					"name": "APP_DATA_PATH",
+					"value": "${APP_DATA_PATH}"
+				}
+			],
+			"portMappings": [
+				{
+					"containerPort": ${APP_PORT},
+					"hostPort": ${APP_PORT},
+					"protocol": "tcp"
+				}
+			],
+			"mountPoints": [
+				{
+					"containerPath": "${APP_DATA_PATH}",
+					"readOnly": false,
+					"sourceVolume": "simple-flask-data"
+				}
+			],
+			"logConfiguration": {
+				"logDriver": "awslogs",
+				"options": {
+					"awslogs-group": "/ecs/simple-flask",
+					"awslogs-region": "ap-southeast-1",
+					"awslogs-stream-prefix": "ecs"
+				}
+			},
+			"restartPolicy": {
+				"enabled": true
+			}
+		}
+	],
+	"requiresCompatibilities": ["FARGATE"],
+	"cpu": "256",
+	"memory": "512",
+	"volumes": [
+		{
+			"efsVolumeConfiguration": {
+				"fileSystemId": "${AWS_EFS_ID}",
+				"rootDirectory": "/"
+			},
+			"name": "simple-flask-data"
+		}
+	]
+}
