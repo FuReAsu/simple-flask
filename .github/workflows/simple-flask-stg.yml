@@ -1,5 +1,5 @@
 name: simple-flask
-run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ github.ref_name }} -> ${{ github.event.pull_requests.base.ref }}
+run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ github.ref_name }} deploying staging
 on:
   push:
     branches:
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: Configure AWS credentials
-        uses: aws-action/configure-aws-credentials@v4.3.1
+        uses: aws-actions/configure-aws-credentials@v4.3.1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
@@ -40,7 +40,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: Configure AWS credentials
-        uses: aws-action/configure-aws-credentials@v4.3.1
+        uses: aws-actions/configure-aws-credentials@v4.3.1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
