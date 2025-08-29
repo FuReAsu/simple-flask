@@ -22,6 +22,7 @@ jobs:
 
   push_build:
     runs-on: ubuntu-24.04
+    needs: test
     if: github.event_name == 'push'
     steps:
       - name: Checkout repo
@@ -35,6 +36,7 @@ jobs:
 
   pull_repuest_build:
     runs-on: ubuntu-24.04
+    needs: test
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repo
