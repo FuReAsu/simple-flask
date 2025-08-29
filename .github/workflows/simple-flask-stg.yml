@@ -52,6 +52,7 @@ jobs:
           export APP_LOG_PATH="/log"
           export ECR_IMAGE_TAG=${GITHUB_SHA::8}
           export AWS_EFS_ID=${{ vars.AWS_EFS_ID }}
+          export AWS_ACCOUNT_ID=${{ vars.AWS_ACCOUNT_ID }}
           envsubst < ecs-task-definition-template.json > ecs-task-def.json
       - name: Apply the task definition to ECS
         run: |
