@@ -1,4 +1,4 @@
-name: simple-flask
+name: simple-flask-staging
 run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ github.ref_name }} deploying staging
 on:
   push:

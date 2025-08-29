@@ -1,5 +1,5 @@
-name: simple-flask
-run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ github.ref_name }} -> ${{ github.event.pull_requests.base.ref }}
+name: simple-flask-development
+run-name: ${{ github.actor }} has performed ${{ github.event_name }} to ${{ github.ref_name }} -> ${{ github.event.pull_request.base.ref }}
 on:
   push:
     branches:
