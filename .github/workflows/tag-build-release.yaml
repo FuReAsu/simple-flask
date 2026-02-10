@@ -1,4 +1,4 @@
-name: tag-build
+name: tag-build-release
 run-name: Building for app version ${{ github.ref }}
 on:
   push:
