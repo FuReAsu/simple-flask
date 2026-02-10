@@ -1,30 +1,30 @@
-from flask import Blueprint, render_template, request, session
-import secrets
-import socket
+from flask import Blueprint, render_template, request, session, redirect, url_for
 import logging
 
-cookies_bp = Blueprint('cookies', __name__)
+cookies_bp = Blueprint("cookies", __name__)
 logger = logging.getLogger(__name__)
 
-@cookies_bp.route("/cookies", methods=["GET"])
+@cookies_bp.route("/cookies", methods=["GET","POST"])
 def cookies():
-    server_name = socket.gethostname()
-    
-    if request.headers.get('X-Forwarded-For'):
-        client_ip = request.headers.get('X-Forwarded-For')
-    elif request.headers.get('X-Real-IP'):
-        client_ip = request.headers.get('X-Real-IP')
+    if request.headers.get("X-Forwarded-For"):
+        client_ip = request.headers.get("X-Forwarded-For")
+    elif request.headers.get("X-Real-IP"):
+        client_ip = request.headers.get("X-Real-IP")
     else:
         client_ip = request.remote_addr
 
-    host = request.host 
+    message = ""
 
-    if request.method == 'GET':
-        if 'session_id' in session:
-            message = f'Your session_id is {session["session_id"]}'
-        else:
-            session['session_id'] = secrets.token_hex(16)
-            message = 'Your session cookie has been set'
-            logger.info(f"{client_ip} | cookie {session["session_id"]} set for client")
-            
-    return render_template('cookies.html', message=message, server_name=server_name, client_ip=client_ip, host=host)
+    if "session_id" in session:
+        message = f"Your session_id is {session["session_id"]}"
+    else:
+        return redirect(url_for('home.home'))
+           
+    if request.method == "POST":
+        button_clicked = request.form.get("button")
+        if button_clicked == "releaseButton":
+            message = f"Your session_id has been cleared"
+            session.pop("session_id", None)
+            logger.info (f"{client_ip} | cookie has been cleared for client")
+    
+    return render_template("cookies.html", message=message)

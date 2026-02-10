@@ -1,13 +1,12 @@
-from flask import Blueprint, render_template, request
-import socket
+from flask import Blueprint, render_template, request, session, redirect, url_for
 import os
 import logging
 
 logger = logging.getLogger(__name__)
-input_bp = Blueprint('input', __name__)
+input_bp = Blueprint("input", __name__)
 
-FILE_PATH = os.getenv('APP_DATA_PATH','data')
-FILE_NAME = os.path.join(FILE_PATH, 'data.txt')
+FILE_PATH = os.getenv("APP_DATA_PATH","data")
+FILE_NAME = os.path.join(FILE_PATH, "data.txt")
 
 if not os.path.exists(FILE_PATH):
     os.makedirs(FILE_PATH)
@@ -19,33 +18,35 @@ else:
     logger.info(f"data file already exists")
 
 
-@input_bp.route('/input', methods=['GET', 'POST'])
+@input_bp.route("/input", methods=["GET", "POST"])
 def input():
-    server_name = socket.gethostname()
-    if request.headers.get('X-Forwarded-For'):
-        client_ip = request.headers.get('X-Forwarded-For')
-    elif request.headers.get('X-Real-IP'):
-        client_ip = request.headers.get('X-Real-IP')
+    if not "session_id" in session:
+        return redirect(url_for('home.home'))
+
+    if request.headers.get("X-Forwarded-For"):
+        client_ip = request.headers.get("X-Forwarded-For")
+    elif request.headers.get("X-Real-IP"):
+        client_ip = request.headers.get("X-Real-IP")
     else:
         client_ip = request.remote_addr
     
-    button_clicked = request.form.get('button')
+    button_clicked = request.form.get("button")
     count = 1
-    data_file = open(FILE_NAME, 'r').read()
+    data_file = open(FILE_NAME, "r").read()
     if data_file:
         for c in data_file:
-            if c == '\n':
+            if c == "\n":
                 count +=1
-    if request.method == 'POST':
-        if button_clicked == 'submitButton':
-            input_data = request.form.get('input', '')
-            with open(FILE_NAME, 'a') as f:
-                f.write(f'{count} '+ input_data + '\n')
+    if request.method == "POST":
+        if button_clicked == "submitButton":
+            input_data = request.form.get("input", "")
+            with open(FILE_NAME, "a") as f:
+                f.write(f"{count} "+ input_data + "\n")
             logger.info(f"{client_ip} | data inputed: {input_data}")
-        elif button_clicked == 'clearButton':
-            open(FILE_NAME, 'w').close()
+        elif button_clicked == "clearButton":
+            open(FILE_NAME, "w").close()
             logger.info(f"{client_ip} | data wiped")
-    with open(FILE_NAME, 'r') as f:
+    with open(FILE_NAME, "r") as f:
         content = f.read()
     
-    return render_template('input.html', content=content, server_name=server_name, client_ip=client_ip)
+    return render_template("input.html", content=content)

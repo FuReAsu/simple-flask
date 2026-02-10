@@ -1,13 +1,21 @@
-from flask import Blueprint, render_template, url_for
+from flask import Blueprint, render_template, url_for, session
+import logging
+import secrets
 
+logger = logging.getLogger(__name__)
 home_bp = Blueprint('home', __name__)
 
 @home_bp.route("/", methods=["GET"])
 def home():
     routes = {
-        "Test Session Cookies": url_for('cookies.cookies'),
-        "Test Input"          : url_for('input.input'),
-        "Test Picture"        : url_for('picture.picture'),
-        "Health"              : url_for('health.health')
+        "Session Cookie"   : url_for('cookies.cookies'),
+        "File Input"        : url_for('input.input'),
+        "Picture Ref"       : url_for('picture.picture'),
+        "Health"            : url_for('health.health')
     }
+
+    if not "session_id" in session:
+        session["session_id"] = secrets.token_hex(16)
+        logger.info('cookie {session["session_id"]} set for client')
+
     return render_template('home.html', routes=routes)

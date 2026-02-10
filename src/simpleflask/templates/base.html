@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session Cookie</title>
+    <title>{% block title %}Simple-Flask{% endblock %}</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}{% endblock %}
 </head>
 <body>
     <div class="banner">
@@ -16,17 +17,7 @@
     </div>
 
     <div class="page">
-        <h1>Session Cookie</h1>
-
-        <div class="card">
-            <p>{{ message }}</p>
-
-            <form method="POST">
-                <button type="submit" name="button" value="releaseButton">
-                    Release
-                </button>
-            </form>
-        </div>
+        {% block content %}{% endblock %}
     </div>
 </body>
 </html>

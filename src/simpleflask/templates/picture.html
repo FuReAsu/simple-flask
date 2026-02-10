@@ -1,12 +1,31 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>
-			Picture Test
-		</title>
-	</head>
-	<body>
-		<h2>Sample Picture</h2>
-		<img src="https://raw.githubusercontent.com/orangci/walls/master/railroad-2.jpg" alt="orangci_rail_road_2_wallpaper">
-	</body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Test</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="banner">
+        <div class="banner-title">Simple-Flask</div>
+        <div class="banner-buttons">
+            <a href="{{ url_for('home.home') }}" class="banner-button">Home</a>
+        </div>
+    </div>
+    <div class="page">
+        <h1>Picture Test</h1>
+
+        <div class="card">
+            <h2>Sample Picture</h2>
+
+            <img
+                src="https://raw.githubusercontent.com/orangci/walls/master/railroad-2.jpg"
+                alt="orangci railroad wallpaper"
+                class="card-image"
+            >
+        </div>
+    </div>
+</body>
 </html>
