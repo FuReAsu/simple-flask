@@ -1,0 +1,19 @@
+name: tag-build
+run-name: Building for app version ${{ github.ref }}
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Build docker image
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${GITHUB_REF_NAME} .
+      - name: Login to dockerhub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Push to dockerhub
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${GITHUB_REF_NAME}
