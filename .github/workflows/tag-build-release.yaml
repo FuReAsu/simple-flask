@@ -1,6 +1,9 @@
 name: tag-build-release
 run-name: Building for app version ${{ github.ref_name }}
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
