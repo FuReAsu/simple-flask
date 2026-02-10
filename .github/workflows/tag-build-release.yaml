@@ -1,5 +1,5 @@
 name: tag-build-release
-run-name: Building for app version ${{ github.ref }}
+run-name: Building for app version ${{ github.ref_name }}
 
 on:
   push:
@@ -13,9 +13,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Build docker image
+      - name: Build docker image 
         run: |
-          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref }} .
+          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }} .
+
+      - name: Tag latest image
+        run: |
+          docker tag ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }} \
+          ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:latest
 
       - name: Login to dockerhub
         run: |
@@ -24,7 +29,8 @@ jobs:
 
       - name: Push to dockerhub
         run: |
-          docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref }}
+          docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref_name }} && \
+          docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:latest
 
   release:
     runs-on: ubuntu-24.04
@@ -37,7 +43,7 @@ jobs:
           cat <<EOF > release.md
           ## Container Image
 
-          https://hub.docker.com/repository/docker/${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}/tags/${{ github.ref }}
+          https://hub.docker.com/repository/docker/${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}/tags/${{ github.ref_name }}
           EOF
 
       - name: Create release
@@ -46,8 +52,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
           body_path: release.md
           draft: false
           prerelease: false
