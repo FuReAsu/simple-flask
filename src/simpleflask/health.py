@@ -7,4 +7,4 @@ health_bp = Blueprint("health", __name__)
 @health_bp.route("/health")
 def health():
     logger.info("/health endpoint called")
-    return jsonify({"Status": "Healthy"})
+    return jsonify({"Status": "Running"})
