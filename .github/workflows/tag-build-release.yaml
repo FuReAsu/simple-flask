@@ -1,5 +1,6 @@
 name: tag-build-release
 run-name: Building for app version ${{ github.ref }}
+
 on:
   push:
     tags:
@@ -11,18 +12,26 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
       - name: Build docker image
-        run: docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref }} .
+        run: |
+          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref }} .
+
       - name: Login to dockerhub
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
+        run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" \
+          | docker login -u ${{ vars.DOCKERHUB_USERNAME }} --password-stdin
+
       - name: Push to dockerhub
-        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref }}
-  
+        run: |
+          docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE }}:${{ github.ref }}
+
   release:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
       - name: Generate release md
         run: |
           cat <<EOF > release.md
