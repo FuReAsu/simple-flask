@@ -1,6 +1,8 @@
-app/data
-app/log
-app/.env
+data
+log
+.env
 __pycache__
-app/__pycache__
 venv
+docker-compose.yml
+.gitignore
+.git
