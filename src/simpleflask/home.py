@@ -16,6 +16,6 @@ def home():
 
     if not "session_id" in session:
         session["session_id"] = secrets.token_hex(16)
-        logger.info('cookie {session["session_id"]} set for client')
+        logger.info(f'cookie {session["session_id"]} set for client')
 
     return render_template('home.html', routes=routes)
