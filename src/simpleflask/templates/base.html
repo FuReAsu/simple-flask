@@ -13,11 +13,14 @@
         <div class="banner-title">Simple-Flask</div>
         <div class="banner-buttons">
             <a href="{{ url_for('home.home') }}" class="banner-button">Home</a>
+            <a href="https://github.com/FuReAsu/simple-flask.git" class="banner-button" rel="noopener noreferrer" target="_blank">GitHub</a>
         </div>
     </div>
 
     <div class="page">
         {% block content %}{% endblock %}
     </div>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>
