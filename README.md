@@ -17,5 +17,8 @@ Set this to 2 if there's two reverse proxies for example: cloudflare -> nginx ->
 
 ## Endpoints
 
-`/cookies` sets cookies and and write them back to the page along with client IP.</br>
-`/input` accepts inputs and saves them to the data.txt file in `APP_LOG_PATH` directory.
+`/cookies` print out session cookies back to the page has a button to release cookies.</br>
+`/input` accepts inputs and saves them to the data.txt file in `APP_LOG_PATH` directory.</br>
+`/status` shows client IP, Server Hostname, Host Header value, shows if the server is behing https (kinda unnecessary) , uptime.</br>
+`/health` returns json. Intended to be used as healh-check endpoint. Needs improvements.</br>
+`/picture` shows an href'ed picture. Just to test referenced media loading.
