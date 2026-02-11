@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Status - Simple-Flask{% endblock %}
+
+{% block content %}
+    <h1>Server Status</h1>
+
+    <div class="card">
+        <p>You have reached <strong>{{ host_header }}</strong></p>
+        <p>Client IP: <strong>{{ client_ip }}</strong></p>
+        <p>Server Hostname: <strong>{{ server_name }}</strong></p>
+        <p>Secure (HTTPS): <strong>{{ is_secure }}</strong></p>
+    </div>
+{% endblock %}

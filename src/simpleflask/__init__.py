@@ -6,7 +6,9 @@ import logging
 
 def create_app():
     app = Flask(__name__)
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
+    proxies = int(os.getenv('REVERSE_PROXIES', 1))
+    print(f"REVERSE_PROXIES value {proxies}")
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=proxies, x_proto=proxies, x_host=proxies, x_port=proxies, x_prefix=proxies)
     app.secret_key = secrets.token_hex(32)
 
     #Define Log dir and Log file
@@ -37,10 +39,12 @@ def create_app():
     from .input import input_bp
     from .health import health_bp
     from .picture import picture_bp
+    from .status import status_bp
     app.register_blueprint(home_bp)
     app.register_blueprint(cookies_bp)
     app.register_blueprint(input_bp)
     app.register_blueprint(health_bp)
     app.register_blueprint(picture_bp)
+    app.register_blueprint(status_bp)
     
     return app

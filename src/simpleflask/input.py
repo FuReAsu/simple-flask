@@ -23,13 +23,7 @@ def input():
     if not "session_id" in session:
         return redirect(url_for('home.home'))
 
-    if request.headers.get("X-Forwarded-For"):
-        client_ip = request.headers.get("X-Forwarded-For")
-    elif request.headers.get("X-Real-IP"):
-        client_ip = request.headers.get("X-Real-IP")
-    else:
-        client_ip = request.remote_addr
-    
+    client_ip = request.remote_addr
     button_clicked = request.form.get("button")
     count = 1
     data_file = open(FILE_NAME, "r").read()

@@ -11,7 +11,7 @@ def home():
         "Session Cookie"   : url_for('cookies.cookies'),
         "File Input"        : url_for('input.input'),
         "Picture Ref"       : url_for('picture.picture'),
-        "Health"            : url_for('health.health')
+        "Server Status"     : url_for('status.status')
     }
 
     if not "session_id" in session:
