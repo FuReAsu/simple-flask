@@ -8,6 +8,7 @@ services:
       APP_PORT: 5080
       APP_LOG_PATH: /log
       APP_DATA_PATH: /data
+      REVERSE_PROXIES: 0
     volumes:
       - data:/data
       - log:/log

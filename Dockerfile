@@ -1,3 +1,4 @@
+LABEL org.opencontainers.image.authors="Hein Htet Zaw <h3inhtetzaw346@gmail.com>"
 FROM python:3.13-alpine3.22
 
 COPY ./requirements.txt .
