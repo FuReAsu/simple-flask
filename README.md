@@ -12,7 +12,7 @@ Just a simple flask app with some pages to test CI/CD pipeline that's all.
 |REVERSE_PROXIES|How many reverse proxies used| 1|
 
 `REVERSE_PROXIES` is used for flask's proxyFix config that trusts a certain number of proxy header layers.</br>
-Set this to 1 if there's one reverse proxy for example: nginx -> flask.
+Set this to 1 if there's one reverse proxy for example: nginx -> flask.</br>
 Set this to 2 if there's two reverse proxies for example: cloudflare -> nginx -> flask.
 
 ## Endpoints
