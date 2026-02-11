@@ -1,5 +1,5 @@
 name: tag-build-release
-run-name: Building for app version ${{ github.ref_name }}
+run-name: Building version ${{ github.ref_name }} of ${{ github.repository }}
 
 permissions:
   contents: write
