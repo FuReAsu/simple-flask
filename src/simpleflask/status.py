@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
+from simpleflask.util.uptime import uptime
 import socket
 import logging
 
@@ -14,9 +15,11 @@ def status():
     client_ip = request.remote_addr
     host_header = request.host
     is_secure = request.is_secure
+    server_uptime = uptime()
     
     return render_template("status.html", 
                            server_name=server_name,
                            client_ip=client_ip,
                            host_header=host_header,
-                           is_secure=is_secure)
+                           is_secure=is_secure,
+                           server_uptime=server_uptime)
